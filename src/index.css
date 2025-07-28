@@ -1,68 +1,306 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Light Mode Colors */
+  --background-color: #f4f7f6;
+  --container-bg-color: #ffffff;
+  --text-color: #333;
+  --primary-color: #007bff; /* For buttons, highlights */
+  --secondary-color: #6c757d; /* For muted text, rest day badge */
+  --success-color: #28a745; /* For hours badge */
+  --info-color: #17a2b8; /* For rest day background */
+  --border-color: #dee2e6;
+  --muted-text-color: #8A8A8A; /* For days outside month */
+  --hover-bg-color: #e2e6ea;
+  --header-bg-color: #e9ecef;
+  --table-secondary-bg: #e9ecef;
+  --current-day-bg: #FF3B30; /* Red for current day circle */
+  --current-day-text: #FFFFFF;
+  --time-range-text-color: #6c757d; /* Dark gray for time range in light mode */
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Dark Mode Colors */
+body.dark-mode {
+  --background-color: #1E1E1E;
+  --container-bg-color: #2C2C2C;
+  --text-color: #F0F0F0;
+  --primary-color: #66b3ff; /* Adjusted for dark mode */
+  --secondary-color: #a0a0a0;
+  --success-color: #4caf50;
+  --info-color: #00bcd4;
+  --border-color: #3A3A3A;
+  --muted-text-color: #B0B0B0; /* Lighter gray for muted text in dark mode */
+  --hover-bg-color: #4a4a4a;
+  --header-bg-color: #4a4a4a;
+  --table-secondary-bg: #4a4a4a;
+  --current-day-bg: #FF3B30; /* Red remains vibrant */
+  --current-day-text: #FFFFFF;
+  --time-range-text-color: #B0B0B0; /* Lighter gray for time range in dark mode */
 }
 
 body {
   margin: 0;
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background-color);
+  color: var(--text-color);
   display: flex;
-  place-items: center;
-  min-width: 320px;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.container {
+  background-color: var(--container-bg-color);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Soft shadow */
+  padding: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 900px; /* Max width for better readability */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.user-info {
+  text-align: center;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--container-bg-color);
+}
+
+.table-bordered {
+  border: 1px solid var(--border-color);
+}
+
+.table-bordered th,
+.table-bordered td {
+  border: 1px solid var(--border-color);
+}
+
+.table-secondary {
+  background-color: var(--table-secondary-bg) !important;
+  color: var(--text-color);
+}
+
+.badge {
+  font-size: 0.75em;
+  padding: 0.4em 0.6em;
+  border-radius: 0.25rem;
+}
+
+.badge.bg-success {
+  background-color: var(--success-color) !important;
+}
+
+.badge.bg-secondary {
+  background-color: var(--secondary-color) !important;
+}
+
+.badge.bg-info {
+  background-color: var(--info-color) !important;
+}
+
+/* Calendar specific styles */
+.table-bordered td {
+  height: 100px; /* Fixed height for calendar cells */
+  vertical-align: top; /* Align content to top */
+  padding: 8px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  border-radius: 4px; /* Slight border-radius for cells */
+  background-color: var(--container-bg-color) !important; /* Ensure background is correct */
+  color: var(--text-color); /* Explicitly set text color for all td cells */
+}
+
+.table-bordered td.text-muted {
+  background-color: var(--background-color); /* Lighter background for days outside current month */
+  color: var(--muted-text-color);
+}
+
+.table-bordered td.text-muted .day-number {
+  color: var(--muted-text-color); /* Ensure day number is visible */
+}
+
+.table-bordered td.is-today {
+  background-color: transparent !important; /* Ensure background is transparent for the circle */
+}
+
+.table-bordered td.is-today .day-number {
+  background-color: var(--current-day-bg);
+  color: var(--current-day-text);
+  border-radius: 50%;
+  width: 30px; /* Adjust size of the circle */
+  height: 30px; /* Adjust size of the circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 5px; /* Space between day number and content */
+}
+
+.table-bordered td.bg-info {
+  background-color: var(--info-color) !important;
+  color: var(--container-bg-color) !important;
+}
+
+.table-bordered td:hover {
+  background-color: var(--hover-bg-color); /* Subtle hover effect */
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.table-bordered td.is-today:hover,
+.table-bordered td.bg-info:hover {
+  background-color: inherit; /* Keep original background for selected/rest days on hover */
+}
+
+.table-bordered td .day-number {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block; /* Ensure it takes its own line */
+  text-align: left; /* Align day number to top-left */
+}
+
+.table-bordered td small {
+  font-size: 0.75em;
+}
+
+.table-bordered th {
+  background-color: var(--header-bg-color);
+  color: var(--text-color);
+  font-weight: normal; /* As per description */
+}
+
+.d-flex.justify-content-between.align-items-center.mb-4 h2 {
+  margin-bottom: 0;
+  color: var(--text-color); /* Use text-color for month/year */
+  font-weight: normal; /* As per description */
+}
+
+.theme-toggle-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--text-color);
+  transition: color 0.3s ease;
+}
+
+.theme-toggle-button:hover {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--container-bg-color);
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 400px;
+  color: var(--text-color);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: var(--text-color);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+}
+
+.form-check-input {
+  margin-right: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: var(--container-bg-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  opacity: 0.9;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-secondary {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  color: var(--container-bg-color);
+}
+
+.btn-secondary:hover {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
+  opacity: 0.9;
+}
+
+.error-message {
+  color: #dc3545; /* Red color for error messages */
+  font-size: 0.85em;
+  margin-top: 5px;
 }
