@@ -1,15 +1,35 @@
-# React + TypeScript + Vite
+# Calendario de Trabajo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este proyecto es una aplicación de calendario de trabajo interactiva, desarrollada con React, TypeScript y Vite. Permite a los usuarios registrar sus horas de entrada y salida, marcar días de descanso, y obtener resúmenes detallados de su tiempo trabajado.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Registro de Horas Flexible:** Ingresa horas de entrada y salida para cada día, con cálculo automático de las horas trabajadas. Soporte para turnos nocturnos.
+- **Días de Descanso:** Marca fácilmente los días como días de descanso.
+- **Entrada de Datos Mejorada:** Interfaz de usuario intuitiva con un modal para registrar y editar entradas, reemplazando las ventanas `prompt()`.
+- **Validación de Horas:** Feedback visual directo en el modal para formatos de hora incorrectos y validación de la lógica de entrada/salida.
+- **Auto-formato de Horas:** Inserción automática de los dos puntos (`:`) al ingresar las horas (ej. escribir `0900` se convierte en `09:00`).
+- **Resumen Semanal:** Visualiza el total de horas y días trabajados por semana, incluyendo el número de semana.
+- **Resumen Mensual:** Obtén un resumen completo de horas trabajadas, días trabajados y días de descanso para el mes actual.
+- **Exportación de Datos:** Exporta todos tus registros a un archivo CSV, incluyendo tu nombre, lugar de trabajo y número de semana, para análisis externo o respaldo.
+- **Modo Claro/Oscuro:** Alterna entre un tema claro y oscuro, con persistencia de la preferencia y detección automática de la configuración del sistema.
+- **Interfaz de Usuario Moderna:** Diseño limpio y profesional con estilos adaptativos para una mejor experiencia visual.
+- **Persistencia de Datos:** Toda la información se guarda localmente en el navegador (Local Storage) para que no se pierda al cerrar la aplicación.
 
-## Expanding the ESLint configuration
+## Configuración del Proyecto
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Este proyecto utiliza [Vite](https://vitejs.dev/) para un entorno de desarrollo rápido y [TypeScript](https://www.typescriptlang.org/) para un tipado estático.
+
+### Scripts Disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo.
+- `npm run build`: Compila la aplicación para producción.
+- `npm run lint`: Ejecuta el linter para verificar el código.
+- `npm run preview`: Previsualiza la compilación de producción localmente.
+
+## Expandiendo la configuración de ESLint
+
+Si estás desarrollando una aplicación de producción, se recomienda actualizar la configuración para habilitar las reglas de linting conscientes del tipo:
 
 ```js
 export default tseslint.config([
@@ -39,7 +59,7 @@ export default tseslint.config([
 ])
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+También puedes instalar [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) y [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) para reglas de linting específicas de React:
 
 ```js
 // eslint.config.js
