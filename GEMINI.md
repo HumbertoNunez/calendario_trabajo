@@ -81,7 +81,7 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
 - **Acciones:**
     - Se configuró un nuevo proyecto en Supabase, incluyendo la creación de la tabla `work_entries` y la definición de políticas de Row Level Security (RLS) para asegurar los datos por usuario.
     - Se instaló la librería `@supabase/supabase-js`.
-    - Se creó `src/supabaseClient.ts` para inicializar el cliente de Supabase.
+    - Se creó `src/supabaseClient.ts` para inicializar el cliente de Supabase. **Nota:** Para el despliegue en Netlify, es crucial configurar `REACT_APP_SUPABASE_URL` y `REACT_APP_SUPABASE_ANON_KEY` como variables de entorno en la configuración del sitio de Netlify (Build & deploy > Environment).
     - Se creó `src/components/Auth.tsx` para manejar el registro e inicio de sesión de usuarios.
     - Se modificó `src/App.tsx` para gestionar la sesión del usuario y renderizar condicionalmente los componentes de autenticación o el calendario.
     - Se refactorizó `src/components/Calendar.tsx` para obtener, guardar, actualizar y eliminar entradas de trabajo directamente desde Supabase, eliminando la dependencia de `localStorage` para los datos del calendario.
