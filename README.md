@@ -31,8 +31,8 @@ Este proyecto es una aplicación de calendario de trabajo interactiva, desarroll
 
 Para la integración con Supabase, asegúrate de configurar las siguientes variables de entorno:
 
-- `REACT_APP_SUPABASE_URL`: La URL de tu proyecto Supabase.
-- `REACT_APP_SUPABASE_ANON_KEY`: La clave pública `anon` de tu proyecto Supabase.
+- `VITE_SUPABASE_URL`: La URL de tu proyecto Supabase.
+- `VITE_SUPABASE_ANON_KEY`: La clave pública `anon` de tu proyecto Supabase.
 
 Estas variables son cruciales para que la aplicación se conecte correctamente a tu base de datos y servicio de autenticación de Supabase, especialmente en entornos de despliegue como Netlify.
 
