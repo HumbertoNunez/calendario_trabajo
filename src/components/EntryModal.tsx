@@ -2,26 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
+interface WorkEntry {
+  id?: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  hours: number;
+  is_rest_day: boolean;
+  user_id?: string;
+}
+
 interface EntryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (dateKey: string, entry: { start?: string, end?: string, hours?: number, isRestDay?: boolean }) => void;
+  onSave: (dateKey: string, entry: { id?: string, start?: string, end?: string, hours?: number, isRestDay?: boolean }) => void;
   selectedDay: Date | null;
-  initialEntry: { start?: string, end?: string, hours?: number, isRestDay?: boolean } | null;
+  initialEntry: WorkEntry | null;
 }
 
 const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, selectedDay, initialEntry }) => {
-  const [startTime, setStartTime] = useState(initialEntry?.start || '');
-  const [endTime, setEndTime] = useState(initialEntry?.end || '');
-  const [isRestDay, setIsRestDay] = useState(initialEntry?.isRestDay || false);
+  const [startTime, setStartTime] = useState(initialEntry?.start_time || '');
+  const [endTime, setEndTime] = useState(initialEntry?.end_time || '');
+  const [isRestDay, setIsRestDay] = useState(initialEntry?.is_rest_day || false);
   const [startTimeError, setStartTimeError] = useState<string | null>(null);
   const [endTimeError, setEndTimeError] = useState<string | null>(null);
 
   useEffect(() => {
     if (isOpen && selectedDay) {
-      setStartTime(initialEntry?.start || '');
-      setEndTime(initialEntry?.end || '');
-      setIsRestDay(initialEntry?.isRestDay || false);
+      setStartTime(initialEntry?.start_time || '');
+      setEndTime(initialEntry?.end_time || '');
+      setIsRestDay(initialEntry?.is_rest_day || false);
       setStartTimeError(null); // Clear errors on modal open
       setEndTimeError(null); // Clear errors on modal open
     }
@@ -37,7 +47,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
 
     const dateKey = format(selectedDay, 'yyyy-MM-dd');
     if (isRestDay) {
-      onSave(dateKey, { isRestDay: true, hours: 0 });
+      onSave(dateKey, { id: initialEntry?.id, isRestDay: true, hours: 0 });
     } else {
       if (!startTime) {
         setStartTimeError('La hora de entrada es requerida.');
@@ -77,14 +87,14 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
         return;
       }
 
-      onSave(dateKey, { start: startTime, end: endTime, hours: calculatedHours, isRestDay: false });
+      onSave(dateKey, { id: initialEntry?.id, start: startTime, end: endTime, hours: calculatedHours, isRestDay: false });
     }
     onClose();
   };
 
   const handleDelete = () => {
     const dateKey = format(selectedDay, 'yyyy-MM-dd');
-    onSave(dateKey, {}); // Pass an empty object to signal deletion
+    onSave(dateKey, { id: initialEntry?.id }); // Pass the ID to signal deletion
     onClose();
   };
 

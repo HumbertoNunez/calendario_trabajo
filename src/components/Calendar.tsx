@@ -4,17 +4,29 @@ import { es } from 'date-fns/locale';
 import EntryModal from './EntryModal'; // Import the EntryModal component
 import { Toaster, toast } from 'react-hot-toast';
 import useLocalStorage from '../hooks/useLocalStorage';
+import { supabase } from '../supabaseClient';
+
+interface WorkEntry {
+  id?: string;
+  date: string;
+  start_time: string;
+  end_time: string;
+  hours: number;
+  is_rest_day: boolean;
+  user_id?: string;
+}
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [workHours, setWorkHours] = useLocalStorage<{ [key: string]: { start?: string, end?: string, hours?: number, isRestDay?: boolean } }>('workHours', {});
+  const [workHours, setWorkHours] = useState<{ [key: string]: WorkEntry }>({});
+  const [loading, setLoading] = useState(true);
 
   const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>('theme', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   // State for the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDayForModal, setSelectedDayForModal] = useState<Date | null>(null);
-  const [initialEntryForModal, setInitialEntryForModal] = useState<{ start?: string, end?: string, hours?: number, isRestDay?: boolean } | null>(null);
+  const [initialEntryForModal, setInitialEntryForModal] = useState<WorkEntry | null>(null);
 
   // Apply theme to body whenever isDarkMode changes
   useEffect(() => {
@@ -24,6 +36,36 @@ const Calendar: React.FC = () => {
       document.body.classList.remove('dark-mode');
     }
   }, [isDarkMode]);
+
+  // Fetch data from Supabase
+  useEffect(() => {
+    const fetchWorkEntries = async () => {
+      setLoading(true);
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (user) {
+        const { data, error } = await supabase
+          .from('work_entries')
+          .select('id, date, start_time, end_time, hours, is_rest_day')
+          .eq('user_id', user.id);
+
+        if (error) {
+          toast.error(error.message);
+        } else if (data) {
+          const formattedData: { [key: string]: WorkEntry } = {};
+          data.forEach(entry => {
+            formattedData[entry.date] = { ...entry, hours: parseFloat(entry.hours) };
+          });
+          setWorkHours(formattedData);
+        }
+      } else {
+        setWorkHours({}); // Clear data if no user is logged in
+      }
+      setLoading(false);
+    };
+
+    fetchWorkEntries();
+  }, [currentDate]); // Re-fetch when month changes
 
   const toggleTheme = () => {
     setIsDarkMode(prevMode => !prevMode);
@@ -43,18 +85,34 @@ const Calendar: React.FC = () => {
     return `${hours}h ${minutes}m`;
   };
 
-  const exportData = () => {
+  const exportData = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Debes iniciar sesión para exportar datos.");
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('work_entries')
+      .select('date, start_time, end_time, hours, is_rest_day')
+      .eq('user_id', user.id)
+      .order('date', { ascending: true });
+
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
+
     const headers = ["Fecha", "Hora Entrada", "Hora Salida", "Horas Trabajadas", "Día de Descanso", "Número de Semana"];
-    const rows = Object.keys(workHours).map(dateKey => {
-      const entry = workHours[dateKey];
-      const day = new Date(dateKey); // Convert dateKey back to Date object
+    const rows = data.map(entry => {
+      const day = new Date(entry.date); // Convert dateKey back to Date object
       const weekNumber = getWeek(day, { weekStartsOn: 1 });
       return [
-        dateKey,
-        entry.start || "",
-        entry.end || "",
+        entry.date,
+        entry.start_time || "",
+        entry.end_time || "",
         entry.hours !== undefined ? entry.hours.toFixed(2) : "",
-        entry.isRestDay ? "Sí" : "No",
+        entry.is_rest_day ? "Sí" : "No",
         weekNumber.toString(),
       ].map(item => `"${item}"`).join(","); // Enclose items in quotes to handle commas within data
     });
@@ -75,20 +133,70 @@ const Calendar: React.FC = () => {
   };
 
   // Function to handle data saved from the modal
-  const handleModalSave = (dateKey: string, entry: { start?: string, end?: string, hours?: number, isRestDay?: boolean }) => {
+  const handleModalSave = async (dateKey: string, entry: { start?: string, end?: string, hours?: number, isRestDay?: boolean, id?: string }) => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Debes iniciar sesión para guardar datos.");
+      return;
+    }
+
+    const entryToSave = {
+      date: dateKey,
+      start_time: entry.start || '',
+      end_time: entry.end || '',
+      hours: entry.hours || 0,
+      is_rest_day: entry.isRestDay || false,
+      user_id: user.id,
+    };
+
     if (Object.keys(entry).length === 0) { // Check if entry is empty, signaling deletion
-      setWorkHours(prev => {
-        const newWorkHours = { ...prev };
-        delete newWorkHours[dateKey];
-        toast.error('Entrada eliminada');
-        return newWorkHours;
-      });
-    } else {
-      setWorkHours(prev => ({
-        ...prev,
-        [dateKey]: entry,
-      }));
-      toast.success('Entrada guardada con éxito');
+      if (entry.id) {
+        const { error } = await supabase
+          .from('work_entries')
+          .delete()
+          .eq('id', entry.id);
+
+        if (error) {
+          toast.error(error.message);
+        } else {
+          setWorkHours(prev => {
+            const newWorkHours = { ...prev };
+            delete newWorkHours[dateKey];
+            return newWorkHours;
+          });
+          toast.error('Entrada eliminada');
+        }
+      }
+    } else if (entry.id) { // Update existing entry
+      const { error } = await supabase
+        .from('work_entries')
+        .update(entryToSave)
+        .eq('id', entry.id);
+
+      if (error) {
+        toast.error(error.message);
+      } else {
+        setWorkHours(prev => ({
+          ...prev,
+          [dateKey]: { ...entryToSave, id: entry.id },
+        }));
+        toast.success('Entrada actualizada con éxito');
+      }
+    } else { // Insert new entry
+      const { data, error } = await supabase
+        .from('work_entries')
+        .insert([entryToSave])
+        .select();
+
+      if (error) {
+        toast.error(error.message);
+      } else if (data && data.length > 0) {
+        setWorkHours(prev => ({
+          ...prev,
+          [dateKey]: { ...entryToSave, id: data[0].id },
+        }));
+        toast.success('Entrada guardada con éxito');
+      }
     }
   };
 
@@ -153,59 +261,65 @@ const Calendar: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: Math.ceil(days.length / 7) }).map((_, weekIndex) => {
-              const weekDays = days.slice(weekIndex * 7, (weekIndex + 1) * 7);
-              let weeklyHours = 0;
-              let weeklyDaysWorked = 0;
+            {loading ? (
+              <tr>
+                <td colSpan={7} className="text-center">Cargando datos...</td>
+              </tr>
+            ) : (
+              Array.from({ length: Math.ceil(days.length / 7) }).map((_, weekIndex) => {
+                const weekDays = days.slice(weekIndex * 7, (weekIndex + 1) * 7);
+                let weeklyHours = 0;
+                let weeklyDaysWorked = 0;
 
-              weekDays.forEach(day => {
-                const dateKey = format(day, 'yyyy-MM-dd');
-                const entry = workHours[dateKey];
-                if (entry && entry.hours !== undefined && !entry.isRestDay) {
-                  weeklyHours += entry.hours;
-                  weeklyDaysWorked++;
-                }
-              });
+                weekDays.forEach(day => {
+                  const dateKey = format(day, 'yyyy-MM-dd');
+                  const entry = workHours[dateKey];
+                  if (entry && entry.hours !== undefined && !entry.isRestDay) {
+                    weeklyHours += entry.hours;
+                    weeklyDaysWorked++;
+                  }
+                });
 
-              return (
-                <React.Fragment key={weekIndex}>
-                  <tr>
-                    {weekDays.map(day => {
-                      const dateKey = format(day, 'yyyy-MM-dd');
-                      const entry = workHours[dateKey];
-                      return (
-                        <td
-                          key={dateKey}
-                          className={`${!isSameMonth(day, monthStart) ? 'text-muted' : ''} ${isToday(day) ? 'is-today' : ''} ${entry?.isRestDay ? 'bg-info text-white' : ''}`}
-                          onClick={() => handleDayClick(day)}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <div className="day-number">{format(day, 'd')}</div>
-                          {entry?.isRestDay && (
-                            <span className="badge bg-secondary mt-1">Día de Descanso</span>
-                          )}
-                          {entry?.hours !== undefined && !entry?.isRestDay && (
-                            <div>
-                              {entry.start && entry.end && (
-                                <span style={{ color: 'var(--time-range-text-color)', marginRight: '0.25rem' }}>{entry.start} - {entry.end}</span>
-                              )}
-                              <div className="mt-1"> {/* Add a div for the new line and some margin-top */}
-                                <span className="badge bg-success">{formatHours(entry.hours)}</span>
+                return (
+                  <React.Fragment key={weekIndex}>
+                    <tr>
+                      {weekDays.map(day => {
+                        const dateKey = format(day, 'yyyy-MM-dd');
+                        const entry = workHours[dateKey];
+                        return (
+                          <td
+                            key={dateKey}
+                            className={`${!isSameMonth(day, monthStart) ? 'text-muted' : ''} ${isToday(day) ? 'is-today' : ''} ${entry?.isRestDay ? 'bg-info text-white' : ''}`}
+                            onClick={() => handleDayClick(day)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <div className="day-number">{format(day, 'd')}</div>
+                            {entry?.isRestDay && (
+                              <span className="badge bg-secondary mt-1">Día de Descanso</span>
+                            )}
+                            {entry?.hours !== undefined && !entry?.isRestDay && (
+                              <div>
+                                {entry.start_time && entry.end_time && (
+                                  <span style={{ color: 'var(--time-range-text-color)', marginRight: '0.25rem' }}>{entry.start_time} - {entry.end_time}</span>
+                                )}
+                                <div className="mt-1"> {/* Add a div for the new line and some margin-top */}
+                                  <span className="badge bg-success">{formatHours(entry.hours)}</span>
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                  <tr className="table-secondary">
-                    <td colSpan={7} className="text-start">
-                      <strong>Semana {getWeek(weekDays[0], { weekStartsOn: 1 })}:</strong> Horas Trabajadas: {formatHours(weeklyHours)}, Días Trabajados: {weeklyDaysWorked}
-                    </td>
-                  </tr>
-                </React.Fragment>
-              );
-            })}
+                            )}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                    <tr className="table-secondary">
+                      <td colSpan={7} className="text-start">
+                        <strong>Semana {getWeek(weekDays[0], { weekStartsOn: 1 })}:</strong> Horas Trabajadas: {formatHours(weeklyHours)}, Días Trabajados: {weeklyDaysWorked}
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>
