@@ -10,12 +10,13 @@ interface WorkEntry {
   hours: number;
   is_rest_day: boolean;
   user_id?: string;
+  notes?: string; // Added notes field
 }
 
 interface EntryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (dateKey: string, entry: { id?: string, start?: string, end?: string, hours?: number, isRestDay?: boolean }) => void;
+  onSave: (dateKey: string, entry: { id?: string, start?: string, end?: string, hours?: number, isRestDay?: boolean, notes?: string }) => void;
   selectedDay: Date | null;
   initialEntry: WorkEntry | null;
 }
@@ -24,6 +25,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
   const [startTime, setStartTime] = useState(initialEntry?.start_time || '');
   const [endTime, setEndTime] = useState(initialEntry?.end_time || '');
   const [isRestDay, setIsRestDay] = useState(initialEntry?.is_rest_day || false);
+  const [notes, setNotes] = useState(initialEntry?.notes || ''); // New state for notes
   const [startTimeError, setStartTimeError] = useState<string | null>(null);
   const [endTimeError, setEndTimeError] = useState<string | null>(null);
 
@@ -32,6 +34,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
       setStartTime(initialEntry?.start_time || '');
       setEndTime(initialEntry?.end_time || '');
       setIsRestDay(initialEntry?.is_rest_day || false);
+      setNotes(initialEntry?.notes || ''); // Initialize notes
       setStartTimeError(null); // Clear errors on modal open
       setEndTimeError(null); // Clear errors on modal open
     }
@@ -47,7 +50,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
 
     const dateKey = format(selectedDay, 'yyyy-MM-dd');
     if (isRestDay) {
-      onSave(dateKey, { id: initialEntry?.id, isRestDay: true, hours: 0 });
+      onSave(dateKey, { id: initialEntry?.id, isRestDay: true, hours: 0, notes: notes }); // Include notes
     } else {
       if (!startTime) {
         setStartTimeError('La hora de entrada es requerida.');
@@ -87,7 +90,7 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
         return;
       }
 
-      onSave(dateKey, { id: initialEntry?.id, start: startTime, end: endTime, hours: calculatedHours, isRestDay: false });
+      onSave(dateKey, { id: initialEntry?.id, start: startTime, end: endTime, hours: calculatedHours, isRestDay: false, notes: notes }); // Include notes
     }
     onClose();
   };
@@ -149,6 +152,17 @@ const EntryModal: React.FC<EntryModalProps> = ({ isOpen, onClose, onSave, select
             title="Formato HH:mm (ej. 09:00 o 17:30)"
           />
           {endTimeError && <p className="error-message">{endTimeError}</p>}
+        </div>
+        <div className="form-group mt-3">
+          <label htmlFor="notes">Notas:</label>
+          <textarea
+            id="notes"
+            className="form-control"
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={3}
+            placeholder="Añade notas sobre tu jornada..."
+          ></textarea>
         </div>
         <div className="form-check mt-3">
           <input

@@ -10,9 +10,11 @@ Este proyecto es una aplicación de calendario de trabajo interactiva, desarroll
 - **Notificaciones Toast:** Feedback visual instantáneo al guardar o eliminar una entrada para una mejor experiencia de usuario.
 - **Validación de Horas:** Feedback visual directo en el modal para formatos de hora incorrectos y validación de la lógica de entrada/salida.
 - **Auto-formato de Horas:** Inserción automática de los dos puntos (`:`) al ingresar las horas (ej. escribir `0900` se convierte en `09:00`).
+- **Campo de Notas:** Añade descripciones o notas detalladas a cada entrada de trabajo para un mejor seguimiento.
 - **Resumen Semanal:** Visualiza el total de horas y días trabajados por semana, incluyendo el número de semana.
 - **Resumen Mensual:** Obtén un resumen completo de horas trabajadas, días trabajados y días de descanso para el mes actual.
 - **Exportación de Datos:** Exporta todos tus registros a un archivo CSV, incluyendo tu nombre, lugar de trabajo y número de semana, para análisis externo o respaldo.
+- **Limpiar Todos los Datos:** Opción para eliminar de forma segura todas tus entradas de trabajo de la base de datos.
 - **Modo Claro/Oscuro:** Alterna entre un tema claro y oscuro, con persistencia de la preferencia y detección automática de la configuración del sistema.
 - **Interfaz de Usuario Moderna:** Diseño limpio y profesional con estilos adaptativos para una mejor experiencia visual.
 - **Persistencia de Datos Segura con Supabase:** Ahora, tus datos se almacenan de forma segura en una base de datos PostgreSQL en la nube (Supabase), permitiéndote acceder a tu información desde cualquier dispositivo y con autenticación de usuario.

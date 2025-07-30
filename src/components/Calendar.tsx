@@ -14,6 +14,7 @@ interface WorkEntry {
   hours: number;
   is_rest_day: boolean;
   user_id?: string;
+  notes?: string; // Added notes field
 }
 
 const Calendar: React.FC = () => {
@@ -46,7 +47,7 @@ const Calendar: React.FC = () => {
       if (user) {
         const { data, error } = await supabase
           .from('work_entries')
-          .select('id, date, start_time, end_time, hours, is_rest_day')
+          .select('id, date, start_time, end_time, hours, is_rest_day, notes') // Include notes
           .eq('user_id', user.id);
 
         if (error) {
@@ -94,7 +95,7 @@ const Calendar: React.FC = () => {
 
     const { data, error } = await supabase
       .from('work_entries')
-      .select('date, start_time, end_time, hours, is_rest_day')
+      .select('date, start_time, end_time, hours, is_rest_day, notes') // Include notes
       .eq('user_id', user.id)
       .order('date', { ascending: true });
 
@@ -103,7 +104,7 @@ const Calendar: React.FC = () => {
       return;
     }
 
-    const headers = ["Fecha", "Hora Entrada", "Hora Salida", "Horas Trabajadas", "Día de Descanso", "Número de Semana"];
+    const headers = ["Fecha", "Hora Entrada", "Hora Salida", "Horas Trabajadas", "Día de Descanso", "Notas", "Número de Semana"]; // Added Notes header
     const rows = data.map(entry => {
       const day = new Date(entry.date); // Convert dateKey back to Date object
       const weekNumber = getWeek(day, { weekStartsOn: 1 });
@@ -113,6 +114,7 @@ const Calendar: React.FC = () => {
         entry.end_time || "",
         entry.hours !== undefined ? entry.hours.toFixed(2) : "",
         entry.is_rest_day ? "Sí" : "No",
+        entry.notes || "", // Include notes
         weekNumber.toString(),
       ].map(item => `"${item}"`).join(","); // Enclose items in quotes to handle commas within data
     });
@@ -132,8 +134,32 @@ const Calendar: React.FC = () => {
     document.body.removeChild(link);
   };
 
+  const clearAllData = async () => {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar TODOS tus datos de trabajo? Esta acción no se puede rehacer.")) {
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.error("Debes iniciar sesión para eliminar datos.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from('work_entries')
+      .delete()
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      setWorkHours({}); // Clear local state
+      toast.success('Todos tus datos de trabajo han sido eliminados.');
+    }
+  };
+
   // Function to handle data saved from the modal
-  const handleModalSave = async (dateKey: string, entry: { start?: string, end?: string, hours?: number, isRestDay?: boolean, id?: string }) => {
+  const handleModalSave = async (dateKey: string, entry: { start?: string, end?: string, hours?: number, isRestDay?: boolean, id?: string, notes?: string }) => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast.error("Debes iniciar sesión para guardar datos.");
@@ -147,6 +173,7 @@ const Calendar: React.FC = () => {
       hours: entry.hours || 0,
       is_rest_day: entry.isRestDay || false,
       user_id: user.id,
+      notes: entry.notes || '', // Include notes
     };
 
     if (Object.keys(entry).length === 0) { // Check if entry is empty, signaling deletion
@@ -247,6 +274,9 @@ const Calendar: React.FC = () => {
         <button className="btn btn-outline-secondary ms-2" onClick={exportData}>
           Exportar Datos
         </button>
+        <button className="btn btn-outline-danger ms-2" onClick={clearAllData}>
+          Limpiar Todos los Datos
+        </button>
       </div>
       <div className="text-center mb-3">
         <p><strong>Resumen Mensual:</strong> Horas Trabajadas: {formatHours(monthlyHours)}, Días Trabajados: {monthlyDaysWorked}, Días de Descanso: {monthlyRestDays}</p>
@@ -305,6 +335,9 @@ const Calendar: React.FC = () => {
                                 <div className="mt-1"> {/* Add a div for the new line and some margin-top */}
                                   <span className="badge bg-success">{formatHours(entry.hours)}</span>
                                 </div>
+                                {entry.notes && (
+                                  <div className="text-muted" style={{ fontSize: '0.75em' }}>{entry.notes}</div>
+                                )}
                               </div>
                             )}
                           </td>
@@ -318,8 +351,7 @@ const Calendar: React.FC = () => {
                     </tr>
                   </React.Fragment>
                 );
-              })
-            )}
+              })}
           </tbody>
         </table>
       </div>

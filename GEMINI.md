@@ -87,7 +87,21 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se refactorizó `src/components/Calendar.tsx` para obtener, guardar, actualizar y eliminar entradas de trabajo directamente desde Supabase, eliminando la dependencia de `localStorage` para los datos del calendario.
     - Se actualizó `src/components/EntryModal.tsx` para pasar el `id` de las entradas al guardar y eliminar, facilitando la interacción con Supabase.
 
+### 14. Implementación de Campo de Notas
+- **Fecha:** 29 de Julio de 2025
+- **Descripción:** Se añadió un campo de "Notas/Descripción" al modal de entrada de horas para permitir a los usuarios añadir detalles a sus entradas de trabajo.
+- **Acciones:**
+    - Se añadió la columna `notes` de tipo `text` a la tabla `work_entries` en Supabase.
+    - Se modificó `src/components/EntryModal.tsx` para incluir un campo de texto para las notas y pasar su valor a la función `onSave`.
+    - Se actualizó `src/components/Calendar.tsx` para manejar el campo `notes` al obtener, guardar y exportar los datos, y para mostrar las notas en la vista del calendario.
+
+### 15. Implementación de la Función "Limpiar Todos los Datos"
+- **Fecha:** 29 de Julio de 2025
+- **Descripción:** Se añadió una función para permitir a los usuarios eliminar todas sus entradas de trabajo de la base de datos.
+- **Acciones:**
+    - Se añadió un botón "Limpiar Todos los Datos" en `src/components/Calendar.tsx`.
+    - Se implementó la función `clearAllData` en `src/components/Calendar.tsx` para eliminar todas las entradas de trabajo del usuario actual de Supabase y limpiar el estado local.
+
 ## Próximos Pasos Sugeridos
 
-- **Añadir campo de "Notas/Descripción"** al modal de entrada de horas.
-- **Función para "Limpiar todos los datos"** (resetear `localStorage`).
+(Ninguno por el momento.)
