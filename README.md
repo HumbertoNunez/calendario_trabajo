@@ -18,6 +18,12 @@ Este proyecto es una aplicación de calendario de trabajo interactiva, desarroll
 - **Persistencia de Datos:** Toda la información se guarda localmente en el navegador (Local Storage) para que no se pierda al cerrar la aplicación.
 - **Código Limpio y Mantenible:** Lógica de persistencia de datos refactorizada a un hook personalizado (`useLocalStorage`) para mayor claridad y reutilización.
 
+## Despliegue
+
+¡Tu aplicación está desplegada y disponible en línea!
+
+**URL de Producción:** [https://calendariotrabajo.netlify.app](https://calendariotrabajo.netlify.app)
+
 ## Configuración del Proyecto
 
 Este proyecto utiliza [Vite](https://vitejs.dev/) para un entorno de desarrollo rápido y [TypeScript](https://www.typescriptlang.org/) para un tipado estático.

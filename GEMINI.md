@@ -70,6 +70,11 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se refactorizó el componente `Calendar.tsx` para utilizar `useLocalStorage` para gestionar el estado de `workHours` y `isDarkMode`.
     - Se eliminó el código `useEffect` redundante que gestionaba la sincronización con `localStorage` manualmente.
 
+### 12. Despliegue a Producción (Netlify)
+- **Fecha:** 29 de Julio de 2025
+- **Descripción:** La aplicación ha sido compilada y desplegada exitosamente a producción utilizando Netlify.
+- **URL de Producción:** [https://calendariotrabajo.netlify.app](https://calendariotrabajo.netlify.app)
+
 ## Próximos Pasos Sugeridos
 
 - **Añadir campo de "Notas/Descripción"** al modal de entrada de horas.

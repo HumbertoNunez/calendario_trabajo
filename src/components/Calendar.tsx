@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isToday, getDay, addDays, getWeek } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isToday, getWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import EntryModal from './EntryModal'; // Import the EntryModal component
 import { Toaster, toast } from 'react-hot-toast';
