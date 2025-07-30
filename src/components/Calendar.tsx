@@ -55,7 +55,7 @@ const Calendar: React.FC = () => {
         } else if (data) {
           const formattedData: { [key: string]: WorkEntry } = {};
           data.forEach(entry => {
-            formattedData[entry.date] = { ...entry, hours: parseFloat(entry.hours) };
+            formattedData[entry.date] = { ...entry, hours: parseFloat(entry.hours.toString()) }; // Ensure hours is parsed correctly
           });
           setWorkHours(formattedData);
         }
@@ -135,7 +135,7 @@ const Calendar: React.FC = () => {
   };
 
   const clearAllData = async () => {
-    if (!window.confirm("¿Estás seguro de que quieres eliminar TODOS tus datos de trabajo? Esta acción no se puede rehacer.")) {
+    if (!window.confirm("¿Estás seguro de que quieres eliminar TODOS tus datos de trabajo? Esta acción no se puede deshacer.")) {
       return;
     }
 
