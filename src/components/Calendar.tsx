@@ -3,42 +3,25 @@ import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, en
 import { es } from 'date-fns/locale';
 import EntryModal from './EntryModal'; // Import the EntryModal component
 import { Toaster, toast } from 'react-hot-toast';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [workHours, setWorkHours] = useState<{ [key: string]: { start?: string, end?: string, hours?: number, isRestDay?: boolean } }>(() => {
-    const savedWorkHours = localStorage.getItem('workHours');
-    return savedWorkHours ? JSON.parse(savedWorkHours) : {};
-  });
+  const [workHours, setWorkHours] = useLocalStorage<{ [key: string]: { start?: string, end?: string, hours?: number, isRestDay?: boolean } }>('workHours', {});
 
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      return savedTheme === 'dark';
-    } else {
-      // Detect user's system preference
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    }
-  });
+  const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean>('theme', window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
   // State for the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDayForModal, setSelectedDayForModal] = useState<Date | null>(null);
   const [initialEntryForModal, setInitialEntryForModal] = useState<{ start?: string, end?: string, hours?: number, isRestDay?: boolean } | null>(null);
 
-  // Save data to localStorage whenever workHours changes
-  useEffect(() => {
-    localStorage.setItem('workHours', JSON.stringify(workHours));
-  }, [workHours]);
-
-  // Apply theme to body and save to localStorage whenever isDarkMode changes
+  // Apply theme to body whenever isDarkMode changes
   useEffect(() => {
     if (isDarkMode) {
       document.body.classList.add('dark-mode');
-      localStorage.setItem('theme', 'dark');
     } else {
       document.body.classList.remove('dark-mode');
-      localStorage.setItem('theme', 'light');
     }
   }, [isDarkMode]);
 

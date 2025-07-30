@@ -16,6 +16,7 @@ Este proyecto es una aplicación de calendario de trabajo interactiva, desarroll
 - **Modo Claro/Oscuro:** Alterna entre un tema claro y oscuro, con persistencia de la preferencia y detección automática de la configuración del sistema.
 - **Interfaz de Usuario Moderna:** Diseño limpio y profesional con estilos adaptativos para una mejor experiencia visual.
 - **Persistencia de Datos:** Toda la información se guarda localmente en el navegador (Local Storage) para que no se pierda al cerrar la aplicación.
+- **Código Limpio y Mantenible:** Lógica de persistencia de datos refactorizada a un hook personalizado (`useLocalStorage`) para mayor claridad y reutilización.
 
 ## Configuración del Proyecto
 
