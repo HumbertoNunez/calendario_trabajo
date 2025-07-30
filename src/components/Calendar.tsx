@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, eachDayOfInterval, isSameMonth, isToday, getDay, addDays, getWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import EntryModal from './EntryModal'; // Import the EntryModal component
+import { Toaster, toast } from 'react-hot-toast';
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -96,6 +97,7 @@ const Calendar: React.FC = () => {
       setWorkHours(prev => {
         const newWorkHours = { ...prev };
         delete newWorkHours[dateKey];
+        toast.error('Entrada eliminada');
         return newWorkHours;
       });
     } else {
@@ -103,6 +105,7 @@ const Calendar: React.FC = () => {
         ...prev,
         [dateKey]: entry,
       }));
+      toast.success('Entrada guardada con éxito');
     }
   };
 
@@ -141,6 +144,7 @@ const Calendar: React.FC = () => {
 
   return (
     <div className="container mt-5">
+      <Toaster />
       <p className="user-info" style={{ color: 'var(--text-color)' }}>Humberto Israel Núñez Fonseca - Media Pro</p>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <button className="btn btn-outline-primary" onClick={prevMonth}>&lt;</button>

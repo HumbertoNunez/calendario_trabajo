@@ -56,6 +56,13 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
 ### 9. Gestión de Repositorio Git y Documentación
 - **Acciones:** Se realizó un commit de todos los cambios implementados hasta la fecha. Se actualizó `README.md` y se creó este archivo `GEMINI.md` para documentar el proceso de desarrollo.
 
+### 10. Implementación de Notificaciones (Toast)
+- **Requerimiento:** Mejorar el feedback al usuario al guardar o eliminar una entrada.
+- **Acciones:**
+    - Se instaló la librería `react-hot-toast`.
+    - Se modificó `Calendar.tsx` para importar y configurar `Toaster`.
+    - Se añadió lógica en `handleModalSave` para mostrar notificaciones de éxito (`toast.success`) al guardar y de error (`toast.error`) al eliminar una entrada.
+
 ## Próximos Pasos Sugeridos
 
 - **Añadir campo de "Notas/Descripción"** al modal de entrada de horas.

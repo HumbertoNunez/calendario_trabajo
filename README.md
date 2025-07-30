@@ -7,6 +7,7 @@ Este proyecto es una aplicación de calendario de trabajo interactiva, desarroll
 - **Registro de Horas Flexible:** Ingresa horas de entrada y salida para cada día, con cálculo automático de las horas trabajadas. Soporte para turnos nocturnos.
 - **Días de Descanso:** Marca fácilmente los días como días de descanso.
 - **Entrada de Datos Mejorada:** Interfaz de usuario intuitiva con un modal para registrar y editar entradas, reemplazando las ventanas `prompt()`.
+- **Notificaciones Toast:** Feedback visual instantáneo al guardar o eliminar una entrada para una mejor experiencia de usuario.
 - **Validación de Horas:** Feedback visual directo en el modal para formatos de hora incorrectos y validación de la lógica de entrada/salida.
 - **Auto-formato de Horas:** Inserción automática de los dos puntos (`:`) al ingresar las horas (ej. escribir `0900` se convierte en `09:00`).
 - **Resumen Semanal:** Visualiza el total de horas y días trabajados por semana, incluyendo el número de semana.
