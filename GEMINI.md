@@ -102,6 +102,15 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se añadió un botón "Limpiar Todos los Datos" en `src/components/Calendar.tsx`.
     - Se implementó la función `clearAllData` en `src/components/Calendar.tsx` para eliminar todas las entradas de trabajo del usuario actual de Supabase y limpiar el estado local.
 
+### 16. Resolución de Errores de Compilación y Despliegue
+- **Fecha:** 30 de Julio de 2025
+- **Descripción:** Se resolvieron errores de compilación que impedían el despliegue automático a Netlify.
+- **Acciones:**
+    - Se corrigió un error de sintaxis persistente en `src/components/Calendar.tsx` reemplazando el contenido del archivo con una versión validada.
+    - Se eliminó una importación de `React` no utilizada en `src/App.tsx`.
+    - Se compiló el proyecto exitosamente con `npm run build`.
+    - Se subieron los cambios al repositorio de GitHub para iniciar el despliegue en Netlify.
+
 ## Próximos Pasos Sugeridos
 
 (Ninguno por el momento.)
