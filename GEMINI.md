@@ -111,6 +111,16 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se compiló el proyecto exitosamente con `npm run build`.
     - Se subieron los cambios al repositorio de GitHub para iniciar el despliegue en Netlify.
 
+### 17. Gestión de Alerta de Seguridad y Corrección de Errores Críticos
+- **Fecha:** 30 de Julio de 2025
+- **Descripción:** Se gestionó una alerta de seguridad de GitGuardian sobre una clave de Supabase expuesta y se corrigieron errores críticos al guardar días de descanso.
+- **Acciones:**
+    - Se revocó la clave de Supabase expuesta y se generó una nueva.
+    - Se eliminó la clave del código fuente y se movió a variables de entorno (`.env`).
+    - Se configuró la aplicación para leer las credenciales desde las variables de entorno, mejorando la seguridad.
+    - Se corrigió un error que impedía guardar días de descanso, modificando la base de datos para permitir valores nulos en las columnas de hora y ajustando el código para enviar `null`.
+    - Se actualizó la documentación y se subieron todos los cambios al repositorio.
+
 ## Próximos Pasos Sugeridos
 
 (Ninguno por el momento.)
