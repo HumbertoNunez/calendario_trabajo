@@ -166,14 +166,14 @@ const Calendar: React.FC = () => {
       return;
     }
 
-    const entryToSave = {
+    const entryToSave: any = {
       date: dateKey,
-      start_time: entry.start || '',
-      end_time: entry.end || '',
+      start_time: entry.start || null,
+      end_time: entry.end || null,
       hours: entry.hours || 0,
       is_rest_day: entry.isRestDay || false,
       user_id: user.id,
-      notes: entry.notes || '', // Include notes
+      notes: entry.notes || '',
     };
 
     if (Object.keys(entry).length === 0) { // Check if entry is empty, signaling deletion
