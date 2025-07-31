@@ -168,8 +168,8 @@ const Calendar: React.FC = () => {
 
     const entryToSave: any = {
       date: dateKey,
-      start_time: entry.start || '',
-      end_time: entry.end || '',
+      start_time: entry.start || null,
+      end_time: entry.end || null,
       hours: entry.hours || 0,
       is_rest_day: entry.isRestDay || false,
       user_id: user.id,
