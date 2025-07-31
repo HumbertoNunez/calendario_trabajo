@@ -249,7 +249,7 @@ const Calendar: React.FC = () => {
     const dateKey = format(day, 'yyyy-MM-dd');
     const entry = workHours[dateKey];
     if (entry) {
-      if (entry.isRestDay) {
+      if (entry.is_rest_day) {
         monthlyRestDays++;
       } else if (entry.hours !== undefined) {
         monthlyHours += entry.hours;
@@ -304,7 +304,7 @@ const Calendar: React.FC = () => {
                 weekDays.forEach(day => {
                   const dateKey = format(day, 'yyyy-MM-dd');
                   const entry = workHours[dateKey];
-                  if (entry && entry.hours !== undefined && !entry.isRestDay) {
+                  if (entry && entry.hours !== undefined && !entry.is_rest_day) {
                     weeklyHours += entry.hours;
                     weeklyDaysWorked++;
                   }
@@ -319,15 +319,15 @@ const Calendar: React.FC = () => {
                         return (
                           <td
                             key={dateKey}
-                            className={`${!isSameMonth(day, monthStart) ? 'text-muted' : ''} ${isToday(day) ? 'is-today' : ''} ${entry?.isRestDay ? 'bg-info text-white' : ''}`}
+                            className={`${!isSameMonth(day, monthStart) ? 'text-muted' : ''} ${isToday(day) ? 'is-today' : ''} ${entry?.is_rest_day ? 'bg-info text-white' : ''}`}
                             onClick={() => handleDayClick(day)}
                             style={{ cursor: 'pointer' }}
                           >
                             <div className="day-number">{format(day, 'd')}</div>
-                            {entry?.isRestDay && (
+                            {entry?.is_rest_day && (
                               <span className="badge bg-secondary mt-1">Día de Descanso</span>
                             )}
-                            {entry?.hours !== undefined && !entry?.isRestDay && (
+                            {entry?.hours !== undefined && !entry?.is_rest_day && (
                               <div>
                                 {entry.start_time && entry.end_time && (
                                   <span style={{ color: 'var(--time-range-text-color)', marginRight: '0.25rem' }}>{entry.start_time} - {entry.end_time}</span>
@@ -351,7 +351,8 @@ const Calendar: React.FC = () => {
                     </tr>
                   </React.Fragment>
                 );
-              })}
+              })
+            )}
           </tbody>
         </table>
       </div>

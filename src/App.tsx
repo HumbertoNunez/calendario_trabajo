@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Calendar from './components/Calendar';
 import Auth from './components/Auth';
 import { supabase } from './supabaseClient';
