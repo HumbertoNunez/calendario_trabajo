@@ -126,6 +126,7 @@ body {
   border-radius: 4px; /* Slight border-radius for cells */
   background-color: var(--container-bg-color) !important; /* Ensure background is correct */
   color: var(--text-color); /* Explicitly set text color for all td cells */
+  white-space: nowrap;
 }
 
 .table-bordered td.text-muted {

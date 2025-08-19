@@ -282,7 +282,7 @@ const Calendar: React.FC = () => {
         <p><strong>Resumen Mensual:</strong> Horas Trabajadas: {formatHours(monthlyHours)}, Días Trabajados: {monthlyDaysWorked}, Días de Descanso: {monthlyRestDays}</p>
       </div>
       <div className="table-responsive">
-        <table className="table table-bordered text-center">
+        <table className="table table-bordered text-center" style={{ minWidth: '700px' }}>
           <thead>
             <tr>
               {daysOfWeek.map(day => (
