@@ -346,7 +346,7 @@ body {
 
 @media (max-width: 480px) {
   body {
-    align-items: flex-start; /* Align container to the top on very small screens */
+    /* Remove flex alignment to prevent centering issues with scrollable table */
   }
 
   .container {
