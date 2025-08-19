@@ -128,6 +128,7 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se añadieron media queries a `src/index.css` para ajustar dinámicamente los estilos en diferentes tamaños de pantalla.
     - Se modificaron los tamaños de fuente, padding, y la altura de las celdas del calendario para optimizar la legibilidad y el uso del espacio en pantallas pequeñas.
     - Se aseguró que el contenedor principal y el modal se adapten correctamente a anchos de pantalla reducidos.
+    - Se implementó el desplazamiento horizontal en la tabla del calendario para evitar desbordamientos en pantallas estrechas.
 
 ## Próximos Pasos Sugeridos
 

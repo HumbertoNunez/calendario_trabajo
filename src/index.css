@@ -305,6 +305,13 @@ body {
   margin-top: 5px;
 }
 
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
   .container {
