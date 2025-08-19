@@ -131,6 +131,13 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se implementó el desplazamiento horizontal en la tabla del calendario para evitar desbordamientos en pantallas estrechas, añadiendo un `min-width` a la tabla y evitando el salto de línea en las celdas.
     - Se corrigió un problema que impedía el desplazamiento completo hacia la izquierda en la vista móvil, refactorizando el método de centrado principal de la aplicación para no usar Flexbox en el `body`.
 
+### 19. Corrección del Desplazamiento en el Modal
+- **Fecha:** 19 de Agosto de 2025
+- **Descripción:** Se solucionó un problema que impedía el desplazamiento vertical en el modal de entrada de datos cuando el dispositivo estaba en orientación horizontal.
+- **Acciones:**
+    - Se modificó el CSS del `.modal-overlay` para permitir el `overflow-y` (desplazamiento vertical).
+    - Se cambió la alineación del modal para que comience en la parte superior de la pantalla, asegurando que los botones de acción sean siempre accesibles mediante scroll.
+
 ## Próximos Pasos Sugeridos
 
 (Ninguno por el momento.)

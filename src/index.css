@@ -213,7 +213,10 @@ body {
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start; /* Align to top */
+  overflow-y: auto; /* Enable vertical scroll */
+  padding-top: 5vh; /* Add some padding at the top */
+  padding-bottom: 5vh; /* Add some padding at the bottom */
   z-index: 1000;
 }
 
