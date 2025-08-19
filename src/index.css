@@ -304,3 +304,82 @@ body {
   font-size: 0.85em;
   margin-top: 5px;
 }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .d-flex.justify-content-between.align-items-center.mb-4 h2 {
+    font-size: 1.5em;
+  }
+
+  .table-bordered td {
+    height: 80px; /* Shorter height for cells on smaller screens */
+    padding: 4px;
+  }
+
+  .table-bordered td .day-number {
+    font-size: 0.9em;
+  }
+
+  .table-bordered td small {
+    font-size: 0.65em;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    align-items: flex-start; /* Align container to the top on very small screens */
+  }
+
+  .container {
+    padding: 10px;
+    border-radius: 0;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+
+  .d-flex.justify-content-between.align-items-center.mb-4 h2 {
+    font-size: 1.2em;
+  }
+  
+  .d-flex.justify-content-between.align-items-center.mb-4 .btn {
+    font-size: 0.8em;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .table-bordered td {
+    height: 60px; /* Even shorter height */
+  }
+
+  .table-bordered th {
+    font-size: 0.8em;
+  }
+
+  .table-bordered td .day-number {
+    font-size: 0.8em;
+    width: 24px;
+    height: 24px;
+  }
+
+  .table-bordered td small {
+    font-size: 0.6em;
+  }
+
+  .summary-section h3 {
+    font-size: 1.1em;
+  }
+
+  .summary-section p {
+    font-size: 0.9em;
+  }
+}

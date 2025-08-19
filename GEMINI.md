@@ -121,6 +121,14 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se corrigió un error que impedía guardar días de descanso, modificando la base de datos para permitir valores nulos en las columnas de hora y ajustando el código para enviar `null`.
     - Se actualizó la documentación y se subieron todos los cambios al repositorio.
 
+### 18. Mejora de la Visualización en Dispositivos Móviles
+- **Fecha:** 19 de Agosto de 2025
+- **Descripción:** Se mejoró la visualización de la aplicación en dispositivos móviles para asegurar que la interfaz sea completamente responsiva.
+- **Acciones:**
+    - Se añadieron media queries a `src/index.css` para ajustar dinámicamente los estilos en diferentes tamaños de pantalla.
+    - Se modificaron los tamaños de fuente, padding, y la altura de las celdas del calendario para optimizar la legibilidad y el uso del espacio en pantallas pequeñas.
+    - Se aseguró que el contenedor principal y el modal se adapten correctamente a anchos de pantalla reducidos.
+
 ## Próximos Pasos Sugeridos
 
 (Ninguno por el momento.)
