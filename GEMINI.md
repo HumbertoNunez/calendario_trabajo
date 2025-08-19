@@ -129,7 +129,7 @@ Este documento detalla el proceso de desarrollo y las interacciones con el usuar
     - Se modificaron los tamaños de fuente, padding, y la altura de las celdas del calendario para optimizar la legibilidad y el uso del espacio en pantallas pequeñas.
     - Se aseguró que el contenedor principal y el modal se adapten correctamente a anchos de pantalla reducidos.
     - Se implementó el desplazamiento horizontal en la tabla del calendario para evitar desbordamientos en pantallas estrechas, añadiendo un `min-width` a la tabla y evitando el salto de línea en las celdas.
-    - Se corrigió un problema que impedía el desplazamiento completo hacia la izquierda en la vista móvil.
+    - Se corrigió un problema que impedía el desplazamiento completo hacia la izquierda en la vista móvil, refactorizando el método de centrado principal de la aplicación para no usar Flexbox en el `body`.
 
 ## Próximos Pasos Sugeridos
 

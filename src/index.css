@@ -45,10 +45,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--background-color);
   color: var(--text-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -61,6 +57,8 @@ body {
   margin-bottom: 20px;
   width: 100%;
   max-width: 900px; /* Max width for better readability */
+  margin-left: auto; /* Center the container */
+  margin-right: auto; /* Center the container */
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
 }
 
